@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Game</title>
+    <link rel="stylesheet" href="Cricket.css">
+</head>
+<body>
+    <div class="start-container">
+        <button onclick="startGame()">Start Game</button>
+    </div>
+    <div class="game-container">
+        <h1>🏏 Bat Ball Stump Game 🏏</h1>
+        <div class="button-container">
+            <button onclick="playGame('Bat')">Bat</button>
+            <button onclick="playGame('Ball')">Ball</button>
+            <button onclick="playGame('Stump')">Stump</button>
+        </div>
+        <div id="user-choice" class="result-container">Your Choice: </div>
+        <div id="computer-choice" class="result-container">Computer Choice: </div>
+        <div id="result" class="result-container">Make your move!</div>
+        <div id="user-score" class="score-container">You Score: 0</div>
+        <div id="computer-score" class="score-container">Computer Score: 0</div>
+        <div id="highest-score" class="score-container">🏆 Highest Score: 0</div>
+        <button onclick="showFinalResult()">Show Final Result</button>
+        <div id="final-result" class="final-result-container" style="display: none;"></div>
+        <button onclick="resetGame()" style="display: none;" id="restart-button">Start Again</button>
+    </div>
+    
+    <script>
+        let userScore = parseInt(localStorage.getItem("userScore")) || 0;
+        let computerScore = parseInt(localStorage.getItem("computerScore")) || 0;
+        let highestScore = parseInt(localStorage.getItem("highestScore")) || 0;
+
+        function startGame() {
+            document.querySelector(".start-container").style.display = "none";
+            document.querySelector(".game-container").style.display = "block";
+            updateScores();
+        }
+
+        function generateComputerChoice() {
+            const choices = ['Bat', 'Ball', 'Stump'];
+            return choices[Math.floor(Math.random() * 3)];
+        }
+
+        function playGame(userChoice) {
+            const computerChoice = generateComputerChoice();
+            let resultMsg;
+
+            document.getElementById("user-choice").innerHTML = `Your Choice: ${userChoice}`;
+            document.getElementById("computer-choice").innerHTML = `Computer Choice: ${computerChoice}`;
+
+            if (userChoice === computerChoice) {
+                resultMsg = "It's a tie.";
+            } else if (
+                (userChoice === 'Bat' && computerChoice === 'Ball') ||
+                (userChoice === 'Ball' && computerChoice === 'Stump') ||
+                (userChoice === 'Stump' && computerChoice === 'Bat')
+            ) {
+                resultMsg = "🎉 You won! 🎉";
+                userScore++;
+            } else {
+                resultMsg = "💔 Computer won! 💔";
+                computerScore++;
+            }
+
+            if (userScore > highestScore) {
+                highestScore = userScore;
+                localStorage.setItem("highestScore", highestScore);
+            }
+
+            localStorage.setItem("userScore", userScore);
+            localStorage.setItem("computerScore", computerScore);
+
+            document.getElementById("result").innerHTML = resultMsg;
+            updateScores();
+        }
+
+        function updateScores() {
+            document.getElementById("user-score").innerHTML = `You Score: ${userScore}`;
+            document.getElementById("computer-score").innerHTML = `Computer Score: ${computerScore}`;
+            document.getElementById("highest-score").innerHTML = `🏆 Highest Score: ${highestScore}`;
+        }
+
+        function showFinalResult() {
+            let finalMsg = userScore > computerScore ? "🎉 You are the champion! 🎉" : "💔 Computer wins the game! 💔";
+            document.getElementById("final-result").innerHTML = `Final Result: ${finalMsg}`;
+            document.getElementById("final-result").style.display = "block";
+            document.getElementById("restart-button").style.display = "block";
+        }
+
+        function resetGame() {
+            userScore = 0;
+            computerScore = 0;
+            localStorage.setItem("userScore", userScore);
+            localStorage.setItem("computerScore", computerScore);
+            updateScores();
+            document.getElementById("final-result").style.display = "none";
+            document.getElementById("restart-button").style.display = "none";
+        }
+    </script>
+</body>
+</html>
