@@ -37,11 +37,3 @@ This is an interactive Bat Ball Stump game where **you** compete against the com
 
 - **Game Interface**: Shows **your** choice, the computer’s choice, and scores.
 - **Final Result Screen**: Displays the final result, showing if **you** or the computer won the game.
-
-## Support
-
-If you encounter any issues or need help, feel free to contact [Your Contact Info].
-
-## License
-
-This project is licensed under the [Your License Name].
